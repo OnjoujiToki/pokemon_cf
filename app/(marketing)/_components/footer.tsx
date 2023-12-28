@@ -1,6 +1,6 @@
 import {Logo} from "@/components/logo";
 import {Button} from "@/components/ui/button";
-import Link from "next/link";
+
 const Footer = () => {
     return (
         <div className={"fixed bottom-0 w-full p-4 border-t bg-slate-100"}>
