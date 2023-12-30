@@ -35,6 +35,7 @@ model ProblemList {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   problems    Problem[]
+  Pokemon     Pokemon[]
 
   @@index([boardId])
 }
@@ -45,56 +46,51 @@ model Problem {
   problemsetName String
   index          String
   name           String
-  description    String
   difficulty     String
-  pokemons       Pokemon[]
   problemLists   ProblemList[]
 }
 
 model User {
   id        String    @id @default(uuid())
-  auth_id   String    @unique
   email     String    @unique
   name      String
   password  String
   rating    Int       @default(0)
-  handle    String // codeforces handle, ppl not unique
+  handle    String? // codeforces handle, ppl not unique
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   pokemons  Pokemon[] // a list of pokemon owned
 }
 
 model Pokemon {
-  id        String   @id @default(uuid())
-  problemId String
-  Problem   Problem  @relation(fields: [problemId], references: [id])
-  name      String
-  image     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  User      User?    @relation(fields: [userId], references: [id]) // potential not caught
-  userId    String? // potential not caught
-  rate      Int      @default(0) // rate of this pokemon being caught, rate / 100 = probability
+  id            String      @id @default(uuid())
+  problemListId String
+  problemList   ProblemList @relation(fields: [problemListId], references: [id])
+  level         Int         @default(1) // 1-100
+  isShiny       Boolean     @default(false) // 1-100 chance of being shiny
+  name          String
+  imageURL      String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  owner         User?       @relation(fields: [userId], references: [id]) // potential not caught
+  userId        String? // potential not caught
+  rate          Int         @default(0) // rate of this pokemon being caught, rate / 100 = probability
 
-  @@index([problemId], name: "problemId") // you catched this pokemon from this problem
+  @@index([problemListId], name: "problemListId") // you catched this pokemon from this problem
   @@index([userId], name: "userId") // got catched by this user
 }
 
 enum ACTION {
   SOLVED
-  FAILED
   CAUGHT
 }
 
 model AuditLog {
-  id     String @id @default(uuid())
-  orgId  String
-  action ACTION
-
+  id          String   @id @default(uuid())
+  orgId       String
+  action      ACTION
   userId      String
-  userImage   String   @db.Text
-  userName    String   @db.Text
-  pokemonName String
+  description String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
