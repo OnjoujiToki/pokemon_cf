@@ -40,7 +40,7 @@ const BoardIdLayout = async ({
   const { orgId } = auth();
 
   if (!orgId) {
-    redirect("/select-org");
+    redirect("/select-team");
   }
 
   const board = await db.board.findUnique({

@@ -8,10 +8,10 @@ export default authMiddleware({
     publicRoutes: ["/", "/api/webhook"],
     afterAuth(auth, req) {
         if (auth.userId && auth.isPublicRoute) {
-            let path = "/select-area";
+            let path = "/select-team";
 
             if (auth.orgId) {
-                path = `/organization/${auth.orgId}`;
+                path = `/teams/${auth.orgId}`;
             }
 
             const orgSelection = new URL(path, req.url);
@@ -22,8 +22,8 @@ export default authMiddleware({
             return redirectToSignIn({ returnBackUrl: req.url });
         }
 
-        if (auth.userId && !auth.orgId && req.nextUrl.pathname !== "/select-area") {
-            const orgSelection = new URL("/select-area", req.url);
+        if (auth.userId && !auth.orgId && req.nextUrl.pathname !== "/select-team") {
+            const orgSelection = new URL("/select-team", req.url);
             return NextResponse.redirect(orgSelection);
         }
     }
