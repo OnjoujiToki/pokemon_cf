@@ -55,7 +55,7 @@ export const NavItem = ({
     {
       label: "Settings",
       icon: <Settings className="h-4 w-4 mr-2" />,
-      href: `/teamss/${organization.id}/settings`,
+      href: `/teams/${organization.id}/settings`,
     },
 
   ];
